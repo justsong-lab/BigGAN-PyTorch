@@ -83,10 +83,49 @@ def train_test_sets_fid(n, gen1, gen2):
                    all_fake_samples[:sample_size].reshape([-1, HEIGHT, WIDTH, 3]).transpose([0, 3, 1, 2]))
 
 
-# Inception Score of the training set in 10 splits
-is_mean, is_std = get_training_set_is()
-print(f'Inception Score: {is_mean}+{is_std}')
+def train_generated_sets_fid(n, real_gen, generated):
+    all_real_samples = np.zeros([n // BATCH_SIZE * BATCH_SIZE, DATA_DIM], dtype=np.uint8)
+    for i in range(int(np.ceil(float(n) / BATCH_SIZE))):
+        all_real_samples[i * BATCH_SIZE:(i + 1) * BATCH_SIZE] = ((next(real_gen)[0] + 1) / 2 * 255).astype(np.uint8)
+    sample_size = min(generated_samples.shape[0], all_real_samples.shape[0])
+    return get_fid(all_real_samples[:sample_size].reshape([-1, HEIGHT, WIDTH, 3]).transpose([0, 3, 1, 2]),
+                   generated_samples)
 
-# FID between training set and test set
-_fid = train_test_sets_fid(50000, train_gen, test_gen)
-print('FID: %f' % _fid)
+
+def calculate_training_set_is_and_fid():
+    # Inception Score of the training set in 10 splits
+    is_mean, is_std = get_training_set_is()
+    print(f'Inception Score: {is_mean}+{is_std}')
+
+    # FID between training set and test set
+    _fid = train_test_sets_fid(50000, train_gen, test_gen)
+    print('FID: %f' % _fid)
+
+
+def calculate_generated_samples_is(images):
+    is_mean, is_std = get_inception_score(images)
+    print(f"IS: {is_mean:.6f}+{is_std:.6f}")
+    return is_mean, is_std
+
+
+def calculate_generated_samples_fid(images):
+    fid = train_generated_sets_fid(50000, train_gen, images)
+    fid = round(fid, 6)
+    print(f"FID: {fid:.6f}")
+    return fid
+
+
+def get_generated_samples(npz_path):
+    images = np.load(npz_path)["samples"]
+    images = np.moveaxis(images, -1, 1)
+    return images
+
+
+if __name__ == '__main__':
+    # calculate_training_set_is_and_fid()
+    experiment_name = "BigGAN_C10_seed0_Gch64_Dch64_bs50_nDs4_Glr2.0e-04_Dlr2.0e-04_Gnlrelu_Dnlrelu_GinitN02_DinitN02_ema"
+    file_name = "2020-10-22_21_18_55"
+    npz_path = rf'.\samples\{experiment_name}\{file_name}.npz'
+    generated_samples = get_generated_samples(npz_path)
+    calculate_generated_samples_is(generated_samples)
+    calculate_generated_samples_fid(generated_samples)

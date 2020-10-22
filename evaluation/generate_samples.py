@@ -27,7 +27,7 @@ def main(config, device='cuda'):
             [generator(new_noise(), yy).detach().cpu() for _ in range(int(samples_num / batch_size))]).numpy()
         generated_samples = np.moveaxis(generated_samples, 1, -1)
         generated_samples = (generated_samples + 1) / 2 * 255
-        generated_samples = generated_samples.astype(int)
+        generated_samples = generated_samples.astype(np.uint8)
         timestamp = datetime.datetime.now().strftime('%Y-%m-%d_%H_%M_%S')
         print(timestamp)
         np.savez(target_dir + timestamp, samples=generated_samples)
