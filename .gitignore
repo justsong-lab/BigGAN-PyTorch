@@ -1,1 +1,8 @@
-
+.vscode
+.idea
+*.npz
+__pycache__
+data
+logs
+samples
+weights
