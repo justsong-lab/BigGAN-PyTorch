@@ -1,5 +1,5 @@
 ## FID
-
+https://github.com/tsc2017/Frechet-Inception-Distance
 
 ## Inception Score
 https://github.com/tsc2017/Inception-Score
