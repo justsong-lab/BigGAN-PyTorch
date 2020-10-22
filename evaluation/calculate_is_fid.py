@@ -84,8 +84,8 @@ def train_test_sets_fid(n, gen1, gen2):
 
 
 # Inception Score of the training set in 10 splits
-is_mean_and_std = get_training_set_is()
-print('Inception Score: mean=%f, std=%f' % is_mean_and_std)
+is_mean, is_std = get_training_set_is()
+print(f'Inception Score: {is_mean}+{is_std}')
 
 # FID between training set and test set
 _fid = train_test_sets_fid(50000, train_gen, test_gen)
