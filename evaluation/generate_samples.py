@@ -18,7 +18,7 @@ def main(config, device='cuda'):
     generator.load_state_dict(torch.load(f"./weights/{config['experiment_name']}/G.pth"), strict=True)
     target_dir = f"./samples/{config['experiment_name']}/"
     with torch.no_grad():
-        samples_num = 10000
+        samples_num = 100000 # 10000
         batch_size = 250
         noise_z = torch.FloatTensor(batch_size, config["dim_z"])
         new_noise = lambda: noise_z.normal_().cuda()
