@@ -36,7 +36,7 @@ def inception_score(images: np.array):
     IS = get_inception_score(BATCH_SIZE, images, inception_images, logits, splits=10)
 
     print()
-    print(f"IS : {IS[0]}+{IS[1]}")
+    print(f"IS : {IS[0]:.6f}+{IS[1]:.6f}")
 
 
 def frechet_inception_distance(real_images: np.array, fake_images: np.array):
@@ -61,11 +61,12 @@ def frechet_inception_distance(real_images: np.array, fake_images: np.array):
 def main():
     experiment_name = "BigGAN_C10_seed0_Gch64_Dch64_bs50_nDs4_Glr2.0e-04_Dlr2.0e-04_Gnlrelu_Dnlrelu_GinitN02_DinitN02_ema"
     # file_name = "2020-10-23_15_24_32"
-    file_name = "2020-10-22_21_18_55"
+    # file_name = "2020-10-22_21_18_55"
+    file_name = "2020-10-23_21_17_15"
     npz_path = rf'.\samples\{experiment_name}\{file_name}.npz'
     generated_samples = get_generated_samples(npz_path)
     training_samples = get_training_samples()
-    # inception_score(generated_samples)
+    inception_score(generated_samples)
     frechet_inception_distance(training_samples, generated_samples)
 
 

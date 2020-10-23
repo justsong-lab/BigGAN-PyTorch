@@ -13,9 +13,9 @@ def sample_pseudo_labels_sparse(num_classes, batch_size):
     return pseudo_labels
 
 
-def main(config, device='cuda'):
+def main(config, device='cuda', name_suffix='_best0'):
     generator = model.Generator(**config).to(device)
-    generator.load_state_dict(torch.load(f"./weights/{config['experiment_name']}/G.pth"), strict=True)
+    generator.load_state_dict(torch.load(f"./weights/{config['experiment_name']}/G{name_suffix}.pth"), strict=True)
     target_dir = f"./samples/{config['experiment_name']}/"
     with torch.no_grad():
         samples_num = 100000 # 10000
