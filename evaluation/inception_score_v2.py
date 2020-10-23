@@ -1,23 +1,25 @@
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 import functools
 import numpy as np
 import time
 from tensorflow.python.ops import array_ops
 from tensorflow.python.ops import functional_ops
 from scipy import misc
+INCEPTION_TFHUB = 'https://tfhub.dev/tensorflow/tfgan/eval/inception/1'
+INCEPTION_OUTPUT = 'logits'
 
-tfgan = tf.contrib.gan
-session = tf.InteractiveSession()
+import tensorflow_gan as tfgan
+session = tf.compat.v1.InteractiveSession()
 
 def inception_logits(images, num_splits = 1):
     images = tf.transpose(images, [0, 2, 3, 1])
     size = 299
-    images = tf.image.resize_bilinear(images, [size, size])
+    images = tf.compat.v1.image.resize_bilinear(images, [size, size])
     generated_images_list = array_ops.split(images, num_or_size_splits = num_splits)
-    logits = functional_ops.map_fn(
-        fn = functools.partial(tfgan.eval.run_inception, output_tensor = 'logits:0'),
+    logits = tf.map_fn(
+        fn = tfgan.eval.classifier_fn_from_tfhub(INCEPTION_TFHUB, INCEPTION_OUTPUT, True),
         elems = array_ops.stack(generated_images_list),
-        parallel_iterations = 1,
+        parallel_iterations = 8,
         back_prop = False,
         swap_memory = True,
         name = 'RunClassifier')

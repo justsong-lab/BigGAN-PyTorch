@@ -1,4 +1,4 @@
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 import functools
 import numpy as np
 import time
@@ -10,9 +10,8 @@ from tensorflow.python.framework import dtypes
 from tensorflow.python.ops import control_flow_ops
 from scipy import misc
 
-tfgan = tf.contrib.gan
-
-session = tf.InteractiveSession()
+import tensorflow_gan as tfgan
+session = tf.compat.v1.InteractiveSession()
 
 def _symmetric_matrix_square_root(mat, eps=1e-10):
   """Compute square root of a symmetric matrix.
