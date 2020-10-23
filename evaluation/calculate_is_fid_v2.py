@@ -1,7 +1,8 @@
+import tensorflow.compat.v1 as tf
 from evaluation.fid_v2 import *
 from evaluation.inception_score_v2 import *
 from glob import glob
-from evaluation.calculate_is_fid import get_generated_samples
+from evaluation.calculate_is_fid import get_generated_samples, train_gen
 import os
 
 
@@ -10,6 +11,17 @@ def load_images_from_directory(img_dir: str):
     images = [get_images(filename) for filename in filenames]
     images = np.transpose(images, axes=[0, 3, 1, 2])
     return images
+
+
+def get_training_samples():
+    HEIGHT = WIDTH = 32
+    DATA_DIM = HEIGHT * WIDTH * 3
+    BATCH_SIZE = 50
+    n = 50000
+    samples = np.zeros([int(np.ceil(float(n) / BATCH_SIZE) * BATCH_SIZE), DATA_DIM], dtype=np.uint8)
+    for i in range(int(np.ceil(float(n) / BATCH_SIZE))):
+        samples[i * BATCH_SIZE:(i + 1) * BATCH_SIZE] = ((next(train_gen)[0] + 1) / 2 * 255).astype(np.uint8)
+    return samples[:n].reshape([-1, HEIGHT, WIDTH, 3]).transpose([0, 3, 1, 2])
 
 
 def inception_score(images: np.array):
@@ -24,7 +36,7 @@ def inception_score(images: np.array):
     IS = get_inception_score(BATCH_SIZE, images, inception_images, logits, splits=10)
 
     print()
-    print("IS : ", IS)
+    print(f"IS : {IS[0]}+{IS[1]}")
 
 
 def frechet_inception_distance(real_images: np.array, fake_images: np.array):
@@ -43,7 +55,7 @@ def frechet_inception_distance(real_images: np.array, fake_images: np.array):
                   activations)
 
     print()
-    print("FID : ", FID / 100)
+    print(f"FID : {FID:.6f}")
 
 
 def main():
@@ -52,8 +64,9 @@ def main():
     file_name = "2020-10-22_21_18_55"
     npz_path = rf'.\samples\{experiment_name}\{file_name}.npz'
     generated_samples = get_generated_samples(npz_path)
-    inception_score(generated_samples)
-    # frechet_inception_distance()
+    training_samples = get_training_samples()
+    # inception_score(generated_samples)
+    frechet_inception_distance(training_samples, generated_samples)
 
 
 if __name__ == '__main__':

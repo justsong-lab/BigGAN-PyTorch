@@ -300,12 +300,14 @@ def kernel_classifier_distance_and_std_from_activations(real_activations,
 
 
 def inception_activations(images, num_splits=1):
+    INCEPTION_TFHUB = 'https://tfhub.dev/tensorflow/tfgan/eval/inception/1'
+    INCEPTION_FINAL_POOL = 'pool_3'
     images = tf.transpose(images, [0, 2, 3, 1])
     size = 299
-    images = tf.image.resize_bilinear(images, [size, size])
+    images = tf.compat.v1.image.resize_bilinear(images, [size, size])
     generated_images_list = array_ops.split(images, num_or_size_splits=num_splits)
-    activations = functional_ops.map_fn(
-        fn=functools.partial(tfgan.eval.run_inception, output_tensor='pool_3:0'),
+    activations = tf.map_fn(
+        fn=tfgan.eval.classifier_fn_from_tfhub(INCEPTION_TFHUB, INCEPTION_FINAL_POOL, True),
         elems=array_ops.stack(generated_images_list),
         parallel_iterations=1,
         back_prop=False,
@@ -334,7 +336,7 @@ def get_fid(fcd, batch_size, images1, images2, inception_images, real_activation
     act1 = get_inception_activations(batch_size, images1, inception_images, activations)
     act2 = get_inception_activations(batch_size, images2, inception_images, activations)
     fid = activations2distance(fcd, real_activation, fake_activation, act1, act2)
-    # print('FID calculation time: %f s' % (time.time() - start_time))
+    print('FID calculation time: %f s' % (time.time() - start_time))
     return fid
 
 def get_kid(kcd, batch_size, images1, images2, inception_images, real_activation, fake_activation, activations):
