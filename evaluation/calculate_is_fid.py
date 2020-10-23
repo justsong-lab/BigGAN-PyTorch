@@ -87,9 +87,9 @@ def train_generated_sets_fid(n, real_gen, generated):
     all_real_samples = np.zeros([n // BATCH_SIZE * BATCH_SIZE, DATA_DIM], dtype=np.uint8)
     for i in range(int(np.ceil(float(n) / BATCH_SIZE))):
         all_real_samples[i * BATCH_SIZE:(i + 1) * BATCH_SIZE] = ((next(real_gen)[0] + 1) / 2 * 255).astype(np.uint8)
-    sample_size = min(generated_samples.shape[0], all_real_samples.shape[0])
+    sample_size = min(generated.shape[0], all_real_samples.shape[0])
     return get_fid(all_real_samples[:sample_size].reshape([-1, HEIGHT, WIDTH, 3]).transpose([0, 3, 1, 2]),
-                   generated_samples)
+                   generated[:sample_size])
 
 
 def calculate_training_set_is_and_fid():
@@ -121,11 +121,16 @@ def get_generated_samples(npz_path):
     return images
 
 
-if __name__ == '__main__':
+def main():
     # calculate_training_set_is_and_fid()
     experiment_name = "BigGAN_C10_seed0_Gch64_Dch64_bs50_nDs4_Glr2.0e-04_Dlr2.0e-04_Gnlrelu_Dnlrelu_GinitN02_DinitN02_ema"
     file_name = "2020-10-23_15_24_32"
+    # file_name = "2020-10-22_21_18_55"
     npz_path = rf'.\samples\{experiment_name}\{file_name}.npz'
     generated_samples = get_generated_samples(npz_path)
     calculate_generated_samples_is(generated_samples)
     calculate_generated_samples_fid(generated_samples)
+
+
+if __name__ == '__main__':
+    main()
