@@ -10,10 +10,12 @@ from torchvision import datasets
 import torchvision.transforms as transforms
 from itertools import repeat, cycle
 
+data_dir = r'D:\Data\facescrub100'
+
 def get_face_loaders(batch_size=64, workers=2, dataset='facescrub100', labels_per_class=112):
     class_num = 100 
     n = class_num * labels_per_class 
-    data_dir = 'facescrub100/'
+    
     loaders = []
     from collections import defaultdict
     import pickle
@@ -114,7 +116,7 @@ def get_face_loaders(batch_size=64, workers=2, dataset='facescrub100', labels_pe
 def get_face_loaders_200(batch_size=100, workers=8, dataset='facescrub100', labels_per_class=128):
     class_num = 100
     n = class_num * labels_per_class 
-    data_dir = 'facescrub100/'
+    
     loaders = []
     from collections import defaultdict
     import pickle
@@ -210,7 +212,7 @@ def get_face_loaders_200(batch_size=100, workers=8, dataset='facescrub100', labe
 def get_face_loaders_semi(batch_size=100, workers=8, dataset='facescrub100', labels_per_class=128):
     class_num = 100
     n = class_num * labels_per_class 
-    data_dir = 'facescrub100/'
+    
     loaders = []
     from collections import defaultdict
     import pickle

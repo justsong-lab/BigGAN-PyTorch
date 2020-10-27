@@ -29,6 +29,8 @@ import losses
 import train_fns
 from sync_batchnorm import patch_replication_callback
 
+import face100_loader
+
 # The main training file. Config is a dictionary specifying the configuration
 # of this training run.
 def run(config):
@@ -130,8 +132,12 @@ def run(config):
   # a full D iteration (regardless of number of D steps and accumulations)
   D_batch_size = (config['batch_size'] * config['num_D_steps']
                   * config['num_D_accumulations'])
-  loaders = utils.get_data_loaders(**{**config, 'batch_size': D_batch_size,
-                                      'start_itr': state_dict['itr']})
+  if config["dataset"] in ["Face100"]:
+    loaders = face100_loader.get_face_loaders(batch_size=D_batch_size)
+  else:
+    loaders = utils.get_data_loaders(**{**config, 'batch_size': D_batch_size,
+                                        'start_itr': state_dict['itr']})
+
 
   # Prepare inception metrics: FID and IS
   get_inception_metrics = inception_utils.prepare_inception_metrics(config['dataset'], config['parallel'], config['no_fid'])

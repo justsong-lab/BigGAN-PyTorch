@@ -15,6 +15,7 @@ import utils
 import inception_utils
 from tqdm import tqdm, trange
 from argparse import ArgumentParser
+import face100_loader
 
 def prepare_parser():
   usage = 'Calculate and store inception metrics.'
@@ -49,7 +50,10 @@ def prepare_parser():
 def run(config):
   # Get loader
   config['drop_last'] = False
-  loaders = utils.get_data_loaders(**config)
+  if config["dataset"] in ["Face100"]:
+    loaders = face100_loader.get_face_loaders(batch_size=200)
+  else:
+    loaders = utils.get_data_loaders(**config)
 
   # Load inception net
   net = inception_utils.load_inception_net(parallel=config['parallel'])
