@@ -4,13 +4,7 @@ import BigGAN as model
 import datetime
 import os
 from utils import interp
-from evaluation.generate_samples import sample_labels, get_config
-
-
-def load_generator(config, name_suffix='_ema_best0', device='cuda'):
-    generator = model.Generator(**config).to(device)
-    generator.load_state_dict(torch.load(f"./weights/{config['experiment_name']}/G{name_suffix}.pth"), strict=True)
-    return generator
+from evaluation.generate_samples import sample_labels, get_config, load_generator
 
 
 def generate_interpolations(config, generator, fix_z=False, fix_y=False, num_per_sheet=16, num_midpoints=8,
@@ -58,7 +52,7 @@ def generate_interpolations(config, generator, fix_z=False, fix_y=False, num_per
 def main():
     cfg = get_config()
     print("Loading model...")
-    g = load_generator(cfg)
+    g = load_generator(cfg, name_suffix='_ema_best2')
     print("Loading done.")
     for fix_z, fix_y in zip([False, False, True], [False, True, False]):
         generate_interpolations(cfg, g, fix_z, fix_y)

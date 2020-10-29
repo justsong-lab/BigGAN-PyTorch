@@ -1,8 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-experiment_name = "BigGAN_C10_seed0_Gch64_Dch64_bs50_nDs4_Glr2.0e-04_Dlr2.0e-04_Gnlrelu_Dnlrelu_GinitN02_DinitN02_ema"
-file_name = "2020-10-22_21_18_55"
+experiment_name = "BigGAN_Face100_seed0_Gch64_Dch64_bs16_nDs2_Glr5.0e-05_Dlr2.0e-04_Gnlrelu_Dnlrelu_Ginitortho_Dinitortho_Gattn64_Dattn64_ema"
+file_name = "2020-10-29_19_58_22"
 npz_path = rf'.\samples\{experiment_name}\{file_name}.npz'
 num = 100
 images = np.load(npz_path)["samples"][:num]

@@ -1,19 +1,20 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="generate_samples" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+  <configuration default="false" name="train Face100" type="PythonConfigurationType" factoryName="Python">
     <module name="BigGAN-PyTorch" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>
       <env name="PYTHONUNBUFFERED" value="1" />
+      <env name="CUDA_VISIBLE_DEVICES" value="0" />
     </envs>
     <option name="SDK_HOME" value="" />
-    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
     <option name="IS_MODULE_SDK" value="true" />
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/evaluation/generate_samples.py" />
-    <option name="PARAMETERS" value="--dataset Face100 --batch_size 16 --ema --use_ema --ema_start 1000 --test_every 5000 --save_every 2000 --num_best_copies 5 --num_save_copies 2 --seed 0 --experiment_name BigGAN_Face100_seed0_Gch64_Dch64_bs16_nDs2_Glr5.0e-05_Dlr2.0e-04_Gnlrelu_Dnlrelu_Ginitortho_Dinitortho_Gattn64_Dattn64_ema" />
+    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/train.py" />
+    <option name="PARAMETERS" value="--dataset Face100 --batch_size 16 --ema --use_ema --ema_start 1000 --test_every 5000 --save_every 2000 --num_best_copies 5 --num_save_copies 2 --seed 0" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />

@@ -13,13 +13,11 @@ def sample_labels(num_classes, batch_size):
     return pseudo_labels
 
 
-def generate_samples(config, name_suffix='_best0', device='cuda'):
-    generator = model.Generator(**config).to(device)
-    generator.load_state_dict(torch.load(f"./weights/{config['experiment_name']}/G{name_suffix}.pth"), strict=True)
+def generate_samples(config, generator, name_suffix='_best0', device='cuda'):
     target_dir = f"./samples/{config['experiment_name']}/"
     with torch.no_grad():
         samples_num = 100000  # 10000
-        batch_size = 250
+        batch_size = 50  # shouldn't be too big to avoid OOM
         noise_z = torch.FloatTensor(batch_size, config["dim_z"])
         new_noise = lambda: noise_z.normal_().cuda()
         yy = sample_labels(config["n_classes"], batch_size)
@@ -42,9 +40,18 @@ def get_config():
     return config
 
 
+def load_generator(config, name_suffix='_ema_best0', device='cuda'):
+    generator = model.Generator(**config).to(device)
+    generator.load_state_dict(torch.load(f"./weights/{config['experiment_name']}/G{name_suffix}.pth"), strict=True)
+    return generator
+
+
 def main():
-    config = get_config()
-    generate_samples(config, "_ema_best0")
+    cfg = get_config()
+    print("Loading model...")
+    g = load_generator(cfg, name_suffix='_ema_best2')
+    print("Loading done.")
+    generate_samples(cfg, g, "_ema_best0")
 
 
 if __name__ == '__main__':
