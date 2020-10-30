@@ -2,7 +2,7 @@ import tensorflow.compat.v1 as tf
 from evaluation.fid_v2 import *
 from evaluation.inception_score_v2 import *
 from glob import glob
-from evaluation.calculate_is_fid import get_generated_samples, train_gen
+from evaluation.calculate_is_fid import load_generated_samples, train_gen
 import os
 
 
@@ -60,11 +60,9 @@ def frechet_inception_distance(real_images: np.array, fake_images: np.array):
 
 def main():
     experiment_name = "BigGAN_C10_seed0_Gch64_Dch64_bs50_nDs4_Glr2.0e-04_Dlr2.0e-04_Gnlrelu_Dnlrelu_GinitN02_DinitN02_ema"
-    # file_name = "2020-10-23_15_24_32"
-    # file_name = "2020-10-22_21_18_55"
     file_name = "2020-10-26_15_35_39"
     npz_path = rf'.\samples\{experiment_name}\{file_name}.npz'
-    generated_samples = get_generated_samples(npz_path)
+    generated_samples = load_generated_samples(npz_path)
     training_samples = get_training_samples()
     inception_score(generated_samples)
     frechet_inception_distance(training_samples, generated_samples)
