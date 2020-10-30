@@ -1,10 +1,9 @@
 import torchvision
 import torch
-import BigGAN as model
 import datetime
 import os
 from utils import interp
-from evaluation.generate_samples import sample_labels, get_config, load_generator
+from evaluation.evaluation_utils import get_config, load_generator, sample_labels
 
 
 def generate_interpolations(config, generator, fix_z=False, fix_y=False, num_per_sheet=16, num_midpoints=8,
@@ -51,9 +50,7 @@ def generate_interpolations(config, generator, fix_z=False, fix_y=False, num_per
 
 def main():
     cfg = get_config()
-    print("Loading model...")
-    g = load_generator(cfg, name_suffix='_ema_best2')
-    print("Loading done.")
+    g = load_generator(cfg)
     for fix_z, fix_y in zip([False, False, True], [False, True, False]):
         generate_interpolations(cfg, g, fix_z, fix_y)
 

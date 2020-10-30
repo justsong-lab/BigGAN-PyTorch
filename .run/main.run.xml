@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="generate_samples" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+  <configuration default="false" name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
     <module name="BigGAN-PyTorch" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
@@ -12,7 +12,7 @@
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/evaluation/generate_samples.py" />
+    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/evaluation/main.py" />
     <option name="PARAMETERS" value="--dataset Face100 --batch_size 16 --ema --use_ema --ema_start 1000 --test_every 5000 --save_every 2000 --num_best_copies 5 --num_save_copies 2 --seed 0" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
