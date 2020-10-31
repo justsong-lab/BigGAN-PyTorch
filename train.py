@@ -132,10 +132,7 @@ def run(config):
   # a full D iteration (regardless of number of D steps and accumulations)
   D_batch_size = (config['batch_size'] * config['num_D_steps']
                   * config['num_D_accumulations'])
-  if config["dataset"] in ["Face100"]:
-    loaders = face100_loader.get_face_loaders(batch_size=D_batch_size)
-  else:
-    loaders = utils.get_data_loaders(**{**config, 'batch_size': D_batch_size,
+  loaders = utils.get_data_loaders(**{**config, 'batch_size': D_batch_size,
                                         'start_itr': state_dict['itr']})
 
 

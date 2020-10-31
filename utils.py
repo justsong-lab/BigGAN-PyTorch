@@ -24,7 +24,7 @@ import torch.nn.functional as F
 import torchvision
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
-
+import face100_loader
 import datasets as dset
 
 def prepare_parser():
@@ -528,7 +528,9 @@ def get_data_loaders(dataset, data_root=None, augment=False, batch_size=64,
                      pin_memory=True, drop_last=True, start_itr=0,
                      num_epochs=500, use_multiepoch_sampler=False,
                      **kwargs):
-
+  if dataset == "Face100":
+    loaders = face100_loader.get_face_loaders(batch_size)
+    return loaders
   # Append /FILENAME.hdf5 to root if using hdf5
   data_root += '/%s' % root_dict[dataset]
   print('Using dataset root location %s' % data_root)
