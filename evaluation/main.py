@@ -5,29 +5,29 @@ from evaluation.interpolation import generate_interpolations
 from evaluation.show_samples import show_samples
 from evaluation.inception_score import get_inception_score
 from evaluation.fid import get_fid
+import torch
 
 
-def calculate_IS_and_FID(dataset='C10'):
-    experiment_name = input("Please input experiment_name: ")
-    file_name = input("Please input file_name: ")
-    calculate_IS_and_FID(experiment_name, file_name, "Face100")
-    print("loading generated_samples...")
-    generated_samples = load_generated_samples(experiment_name, file_name)
-    print("loading done")
-    print("loading cifar samples...")
+def calculate_baseline(dataset='Face100'):
+    log_path = f"./logs/"
+    logger = get_logger(log_path, dataset + ".log")
+    logger("**************** New Start ****************")
+    print("loading samples...")
     if dataset == 'C10':
-        real_samples, _ = load_cifar_samples(mode="train")
+        train_samples, _ = load_cifar_samples(mode="train")
+        test_samples, _ = load_cifar_samples(mode="test")
     elif dataset == 'Face100':
-        real_samples, _ = load_f100_samples(mode='train')
+        train_samples, _ = load_f100_samples(mode='train')
+        test_samples, _ = load_f100_samples(mode="test")
     else:
         print("unsupported dataset")
         return
     print("loading done")
-    # test_samples = load_cifar_samples(mode="test")
-    generated_samples_IS = get_inception_score(generated_samples)
-    baseline_IS = get_inception_score(real_samples)
-    samples_FID = get_fid(real_samples, generated_samples)
-    print(generated_samples_IS, baseline_IS, samples_FID)
+    baseline_IS = get_inception_score(train_samples)
+    logger(f"Inception Score (training samples): {baseline_IS[0]:.6f}+{baseline_IS[1]:.6f}")
+    baseline_FID = get_fid(train_samples, test_samples)
+    logger(f"FID (between training samples & test samples): {baseline_FID:.6f}")
+    logger("**************** Done ****************")
 
 
 def main():
@@ -45,6 +45,7 @@ def main():
         generate_interpolations(cfg, g, fix_z, fix_y)
     logger("Interpolations generated")
     del g
+    torch.cuda.empty_cache()
     # print_banner("Showing some generated samples")
     # show_samples(cfg["experiment_name"], filename)
     print_banner("Calculating IS")
@@ -59,4 +60,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # main()
+    calculate_baseline()
