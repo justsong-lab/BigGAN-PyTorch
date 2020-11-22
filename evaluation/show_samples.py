@@ -18,3 +18,7 @@ def main():
     experiment_name = input("Please input experiment_name: ")
     file_name = input("Please input file_name: ")
     show_samples(experiment_name, file_name)
+
+
+if __name__ == '__main__':
+    main()
